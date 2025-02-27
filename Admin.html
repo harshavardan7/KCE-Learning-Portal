@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - KCE Learning Portal</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Container styles */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* Header styles */
+        header {
+            background: #3498db;
+            color: white;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        /* Tab styles */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        .tab button.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Tab content styles */
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background-color: white;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Button styles */
+        .action-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Link styles */
+        .material-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .material-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="file"],
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Status badge styles */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-new {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .status-inprogress {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .status-completed {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        /* Loading indicator */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Error message styles */
+        .error-message {
+            background-color: #fee;
+            color: #e74c3c;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Admin Dashboard - KCE Learning Portal</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'Materials')" id="defaultOpen">Materials</button>
+            <button class="tablinks" onclick="openTab(event, 'Contacts')">Contacts</button>
+        </div>
+
+        <div id="Materials" class="tabcontent">
+            <h2>Learning Materials</h2>
+            
+            <!-- Add Material Form -->
+            <form id="addMaterialForm" onsubmit="handleAddMaterial(event)">
+                <div class="form-group">
+                    <label for="materialTitle">Title:</label>
+                    <input type="text" id="materialTitle" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="materialType">Type:</label>
+                    <select id="materialType" required>
+                        <option value="PDF">PDF</option>
+                        <option value="Video">Video</option>
+                        <option value="Document">Document</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="materialFile">File:</label>
+                    <input type="file" id="materialFile" required>
+                </div>
+                
+                <button type="submit" class="action-button">Add Material</button>
+            </form>
+
+            <table id="materialsTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Upload Date</th>
+                        <th>File</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="loading">Loading materials...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="Contacts" class="tabcontent">
+            <h2>Contact Form Submissions</h2>
+            <table id="contactsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="loading">Loading contacts...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAFSlsHg1rhrpq1tAFSUu050lYD73s6rxI",
+            authDomain: "learning-portal-b17cd.firebaseapp.com",
+            projectId: "learning-portal-b17cd",
+            storageBucket: "learning-portal-b17cd.appspot.com",
+            messagingSenderId: "432297172789",
+            appId: "1:432297172789:web:f9af3d983f3984201df67c",
+            measurementId: "G-J38JG8YTPZ"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        const auth = firebase.auth();
+
+        // Error handling function
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("tabcontent");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            const tablinks = document.getElementsByClassName("tablinks");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Format date function
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = timestamp.toDate();
+            return new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(date);
+        }
+
+        // Load materials function
+        function loadMaterials() {
+            // const tbody = document.querySelector('#materialsTable tbody');
+            // tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading materials...</td></tr>';
+
+            db.collection('materials')
+        .orderBy('createdAt', 'desc') // Sort by upload date
+        .get()
+        .then((querySnapshot) => {
+            const tbody = document.querySelector('#materialsTable tbody');
+            if (querySnapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading">No materials found</td></tr>';
+                return [];
+            }
+
+            tbody.innerHTML = ''; // Clear current rows
+            let materialsList = [];
+            querySnapshot.forEach((doc) => {
+                const material = doc.data();
+                material.id = doc.id;
+                materialsList.push(material);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${material.title}</td>
+                    <td>${material.type}</td>
+                    <td>${formatDate(material.createdAt)}</td>
+                    <td><a href="${material.fileURL}" target="_blank" class="material-link">View File</a></td>
+                    <td>
+                        <button onclick="editMaterial('${material.id}')" class="action-button">Edit</button>
+                        <button onclick="deleteMaterial('${material.id}')" class="action-button delete-button">Delete</button>
+                    </td>`;
+                tbody.appendChild(row);
+            });
+            console.log(materialsList); // Log all retrieved materials
+        })
+        .catch((error) => {
+            console.error("Error loading materials: ", error);
+            const tbody = document.querySelector('#materialsTable tbody');
+            tbody.innerHTML = '<tr><td colspan="5" class="loading">Error loading materials</td></tr>';
+        });
+        }
+
+        // Handle add material
+        async function handleAddMaterial(event) {
+            event.preventDefault();
+            
+            const titleInput = document.getElementById('materialTitle');
+            const typeInput = document.getElementById('materialType');
+            const fileInput = document.getElementById('materialFile');
+            
+            const file = fileInput.files[0];
+            if (!file) {
+                showError("Please select a file to upload");
+                return;
+            }
+
+            try {
+                // Upload file to Firebase Storage
+                const storageRef = storage.ref(`materials/${Date.now()}_${file.name}`);
+                const snapshot = await storageRef.put(file);
+                const fileURL = await snapshot.ref.getDownloadURL();
+
+                // Add document to Firestore
+                await db.collection('materials').add({
+                    title: titleInput.value,
+                    type: typeInput.value,
+                    fileURL: fileURL,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Reset form and reload materials
+                event.target.reset();
+                loadMaterials();
+            } catch (error) {
+                console.error("Error adding material: ", error);
+                showError("Error adding material. Please try again.");
+            }
+        }
+
+       
+        async function deleteMaterial(id) {
+            if (!confirm("Are you sure you want to delete this material?")) return;
+
+            try {
+                const doc = await db.collection('materials').doc(id).get();
+                if (doc.exists) {
+                    const material = doc.data();
+                    if (material.fileURL) {
+                       
+                        const fileRef = storage.refFromURL(material.fileURL);
+                        await fileRef.delete();
+                    }
+                   
+                    await db.collection('materials').doc(id).delete();
+                    loadMaterials();
+                }
+            } catch (error) {
+                console.error("Error deleting material: ", error);
+                showError("Error deleting material. Please try again.");
+            }
+        }
+
+        function editMaterial(id) {
+            alert("Edit functionality will be implemented soon.");
+        }
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log('Admin is signed in:', user.uid);
+                loadMaterials();
+            } else {
+                console.log('No user is signed in');
+                window.location.href = 'login.html'; 
+            }
+        });
+
+        document.getElementById("defaultOpen").click();
+        function loadContacts() {
+            const tbody = document.querySelector('#contactsTable tbody');
+            tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading contacts...</td></tr>';
+
+            db.collection('contacts')
+                .orderBy('timestamp', 'desc')
+                .get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        tbody.innerHTML = '<tr><td colspan="5" class="loading">No contacts found</td></tr>';
+                        return;
+                    }
+
+                    tbody.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const contact = doc.data();
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${contact.name}</td>
+                            <td>${contact.email}</td>
+                            <td>${contact.subject}</td>
+                            <td>
+                                <span class="status-badge status-${contact.status || 'new'}">
+                                    ${contact.status || 'new'}
+                                </span>
+                            </td>
+                            <td>
+                                <button onclick="updateContactStatus('${doc.id}')" class="action-button">
+                                    Update Status
+                                </button>
+                                <button onclick="deleteContact('${doc.id}')" class="action-button delete-button">
+                                    Delete
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error loading contacts: ", error);
+                    showError("Error loading contacts. Please try again.");
+                    tbody.innerHTML = '<tr><td colspan="5" class="loading">Error loading contacts</td></tr>';
+                });
+        }
+
+        async function updateContactStatus(id) {
+            const statuses = ['new', 'inprogress', 'completed'];
+            const currentDoc = await db.collection('contacts').doc(id).get();
+            const currentStatus = currentDoc.data().status || 'new';
+            const currentIndex = statuses.indexOf(currentStatus);
+            const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+
+            try {
+                await db.collection('contacts').doc(id).update({
+                    status: nextStatus,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                loadContacts();
+            } catch (error) {
+                console.error("Error updating contact status: ", error);
+                showError("Error updating contact status. Please try again.");
+            }
+        }
+
+        async function deleteContact(id) {
+            if (!confirm("Are you sure you want to delete this contact?")) return;
+
+            try {
+                await db.collection('contacts').doc(id).delete();
+                loadContacts();
+            } catch (error) {
+                console.error("Error deleting contact: ", error);
+                showError("Error deleting contact. Please try again.");
+            }
+        }
+
+        function validateFileSize(file) {
+            const maxSize = 50 * 1024 * 1024; 
+            if (file.size > maxSize) {
+                showError("File size must be less than 50MB");
+                return false;
+            }
+            return true;
+        }
+
+        function validateFileType(file) {
+            const allowedTypes = [
+                'application/pdf',
+                'video/mp4',
+                'video/webm',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+            ];
+            
+            if (!allowedTypes.includes(file.type)) {
+                showError("Invalid file type. Please upload PDF, Word, PowerPoint, or video files.");
+                return false;
+            }
+            return true;
+        }
+
+        document.getElementById('materialFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (!validateFileSize(file) || !validateFileType(file)) {
+                    this.value = ''; 
+                }
+            }
+        });
+        function setupRealTimeListeners() {
+           
+            db.collection('materials')
+                .orderBy('createdAt', 'desc')
+                .onSnapshot((snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added" || change.type === "modified" || change.type === "removed") {
+                            loadMaterials();
+                        }
+                    });
+                }, (error) => {
+                    console.error("Error in materials real-time listener: ", error);
+                });
+
+           
+            db.collection('contacts')
+                .orderBy('timestamp', 'desc')
+                .onSnapshot((snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added" || change.type === "modified" || change.type === "removed") {
+                            loadContacts();
+                        }
+                    });
+                }, (error) => {
+                    console.error("Error in contacts real-time listener: ", error);
+                });
+        }
+
+        
+        function setupSearch() {
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.placeholder = 'Search materials...';
+            searchInput.className = 'search-input';
+            searchInput.style.margin = '10px 0';
+            searchInput.style.padding = '8px';
+            searchInput.style.width = '100%';
+            
+            document.getElementById('Materials').insertBefore(
+                searchInput, 
+                document.getElementById('materialsTable')
+            );
+
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const rows = document.querySelectorAll('#materialsTable tbody tr');
+                    
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                }, 300);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    loadMaterials();
+                    loadContacts();
+                    setupRealTimeListeners();
+                    setupSearch();
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+/* Global Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f7f7f7;
+}
+
+/* Header Styles */
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+header nav a:hover {
+    color: #ccc;
+}
+
+/* Main Styles */
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+}
+
+section {
+    background-color: #fff;
+    padding: 1em;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+/* User Management Styles */
+
+.total-users {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.user-filtering {
+    margin-bottom: 20px;
+}
+
+.user-filtering select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.user-list {
+    margin-bottom: 20px;
+}
+
+.user-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-list th, .user-list td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.user-list th {
+    background-color: #f0f0f0;
+}
+
+/* Admin Features Styles */
+
+.pdf-upload, .video-upload {
+    margin-bottom: 20px;
+}
+
+.pdf-upload input, .video-upload input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.pdf-upload textarea, .video-upload textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    height: 100px;
+}
+
+.pdf-upload button, .video-upload button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pdf-upload button:hover, .video-upload button:hover {
+    background-color: #555;
+}
+
+.content-management {
+    margin-bottom: 20px;
+}
+
+.content-management table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.content-management th, .content-management td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.content-management th {
+    background-color: #f0f0f0;
+}
+
+/* User Engagement Styles */
+
+.courses-completed, .time-spent {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.user-feedback {
+    margin-bottom: 20px;
+}
+
+.user-feedback table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-feedback th, .user-feedback td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.user-feedback th {
+    background-color: #f0f0f0;
+}
+
+/* Responsive Styles */
+
+@media (max-width: 768px) {
+    main {
+        padding: 1em;
+    }
+
+    section {
+        margin-bottom: 10px;
+    }
+
+    .user-list table, .content-management table, .user-feedback table {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        padding: 0.5em;
+    }
+
+    section {
+        margin-bottom: 5px;
+    }
+
+    .user-list table, .content-management table, .user-feedback table {
+        font-size: 12px;
+    }
+}
